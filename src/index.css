@@ -1,0 +1,11 @@
+html, body, #root {
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+}
+
+aside {
+  background: #e1e2e4;
+}

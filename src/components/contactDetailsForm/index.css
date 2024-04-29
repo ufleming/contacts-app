@@ -1,0 +1,14 @@
+.contact-details textarea {
+  height: 90px;
+}
+
+.contact-details input:read-only,
+.contact-details textarea:read-only {
+  border-color: transparent;
+  box-shadow: none;
+  resize: none;
+}
+
+.contact-details .contact-details-line:not(:last-child) {
+  border-bottom: 2px solid #f3f3f3;
+}
