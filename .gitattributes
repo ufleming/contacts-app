@@ -1,0 +1,10 @@
+# Automatically detect line endings based on the OS of the user
+* text=auto
+
+# Specify file patterns for text files
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.json text
+*.md text
