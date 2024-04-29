@@ -1,0 +1,45 @@
+.nav-block-title {
+  border-bottom: 2px solid #c3c3c3;
+}
+
+.nav-block a {
+  color: #000;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+
+.nav-block a:hover {
+  background: #0463e1;
+  color: #fff;
+}
+
+.nav-block a.active {
+  background: #0463e1;
+  color: #fff;
+}
+
+.nav-block li {
+  position: relative;
+}
+
+.nav-block .remove-contact-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  background: #ff3a30;
+}
+
+.nav-block .remove-contact-btn:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 60%;
+  height: 20%;
+  background: #fff;
+}
