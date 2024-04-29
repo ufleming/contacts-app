@@ -11,6 +11,7 @@ type NavBlockProps = {
 }
 
 export const NavBlock = ({ title, contacts }: NavBlockProps) => {
+  // TODO: optimize rendering
   const { contactId } = useParams<{ contactId: string }>()
   const isReadOnly = useIsReadOnly()
   const navigate = useNavigate()

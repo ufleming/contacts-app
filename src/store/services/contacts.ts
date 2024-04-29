@@ -6,12 +6,12 @@ import type { Contact, ContactDetails, ContactDataPostBody } from "@/types/conta
 export const contactsApi = createApi({
   reducerPath: "contactsAPI",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
-  tagTypes: ["Contact", "ContactDetails"],
+  tagTypes: ["Contacts", "Contact", "ContactDetails"],
   endpoints: builder => ({
     getContacts: builder.query<Contact[], void>({
       query: () => "contacts?_sort=firstName",
       transformErrorResponse: ({ status }) => toast.error(`${status}: Couldn't load contacts list`),
-      providesTags: () => ["Contact"],
+      providesTags: () => ["Contacts"],
     }),
     getContact: builder.query<Contact, string>({
       query: contactId => `contacts/${contactId}`,
@@ -36,7 +36,7 @@ export const contactsApi = createApi({
         const { firstName, lastName, ...rest } = body
 
         const createdContact = await fetchWithBaseQuery({
-          url: `contact`,
+          url: `contacts`,
           method: "POST",
           body: { firstName, lastName },
         })
@@ -49,7 +49,7 @@ export const contactsApi = createApi({
 
         return createdContact
       },
-      invalidatesTags: ["Contact", "ContactDetails"],
+      invalidatesTags: ["Contacts", "ContactDetails"],
     }),
     updateContact: builder.mutation({
       async queryFn(
@@ -79,23 +79,23 @@ export const contactsApi = createApi({
           },
         }
       },
-      invalidatesTags: ["Contact", "ContactDetails"],
+      invalidatesTags: ["Contacts", "ContactDetails"],
     }),
     deleteContact: builder.mutation({
       queryFn: async (contactId: string = "", _queryApi, _extraOptions, fetchWithBaseQuery) => {
         const data = await fetchWithBaseQuery({
-          url: `contacts/${contactId}X`,
+          url: `contacts/${contactId}`,
           method: "DELETE",
         })
 
         await fetchWithBaseQuery({
-          url: `contactsDetail/${contactId}X`,
+          url: `contactsDetail/${contactId}`,
           method: "DELETE",
         })
 
         return data
       },
-      invalidatesTags: ["Contact", "ContactDetails"],
+      invalidatesTags: ["Contacts"],
     }),
   }),
 })

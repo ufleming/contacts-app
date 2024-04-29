@@ -249,16 +249,6 @@
       "id": 50,
       "firstName": "Madison",
       "lastName": "Martinez"
-    },
-    {
-      "firstName": "Test",
-      "lastName": "sdghsdh",
-      "id": 51
-    },
-    {
-      "firstName": "Atest",
-      "lastName": "test",
-      "id": 52
     }
   ],
   "contactsDetail": [
@@ -611,69 +601,6 @@
       "email": "madison.martinez@example.com",
       "address": "654 Oak St, Anytown, USA",
       "note": "Works as a marketing manager."
-    },
-    {
-      "phone": "35214351",
-      "email": "sdhgs@sgh.com",
-      "address": "",
-      "note": "",
-      "id": 51
-    },
-    {
-      "phone": "4132121",
-      "email": "sdhg@adg.com",
-      "address": "",
-      "note": "",
-      "id": 52
-    },
-    {
-      "phone": "54757457",
-      "email": "ghfkghk@sfh.cfsh",
-      "address": "",
-      "note": "",
-      "id": 53
-    },
-    {
-      "phone": "354346",
-      "email": "sdgsdf@sghd.df",
-      "address": "",
-      "note": "",
-      "id": 54
-    },
-    {
-      "phone": "2345236",
-      "email": "sdhlk@gsd.com",
-      "address": "",
-      "note": "",
-      "id": 55
-    },
-    {
-      "phone": "",
-      "email": "atest@test.com",
-      "address": "",
-      "note": "",
-      "id": 56
-    },
-    {
-      "phone": "",
-      "email": "Atest1@test.com",
-      "address": "",
-      "note": "",
-      "id": 57
-    },
-    {
-      "phone": "",
-      "email": "atest1@test.com",
-      "address": "",
-      "note": "",
-      "id": 58
-    },
-    {
-      "phone": "",
-      "email": "test@test.com",
-      "address": "",
-      "note": "",
-      "id": 59
     }
   ],
   "relations": {
