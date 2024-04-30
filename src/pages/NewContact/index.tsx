@@ -1,7 +1,6 @@
-import { useEffect } from "react"
-import { toast } from "react-toastify"
 import { SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { some } from "lodash"
 import { contactsApi } from "@/store/services/contacts"
 import { ContactDetailsForm } from "@/components/contactDetailsForm"
 import type {
@@ -20,17 +19,24 @@ const contactData: ContactFormData = {
 
 export const NewContact = () => {
   const navigate = useNavigate()
-  const [createContact, { isError }] = contactsApi.useCreateContactMutation()
+  const [createContact, { isError: createContactError }] = contactsApi.useCreateContactMutation()
+  const [
+    createContactDetails,
+    { isError: createContactDetailsError }
+  ] = contactsApi.useCreateContactDetailsMutation()
+  const hasError = some([createContactError, createContactDetailsError], true)
 
-  useEffect(() => {
-    if (isError) toast.error("Error: Couldn't submit your data")
-  }, [isError])
+  const handleSubmit: SubmitHandler<ContactDetailsFormFields> = async data => {
+    const {firstName, lastName, ...contactDetails} = data
 
-  const handleSubmit: SubmitHandler<ContactDetailsFormFields> = data => {
-    // TODO: fix data type
-    createContact(data).then(({ data }) => {
-      if (!isError) navigate(`/${data.id}`)
-    })
+    const [newContact] = await Promise.all([
+      createContact({ firstName, lastName }),
+      createContactDetails({ ...contactDetails }),
+    ])
+
+    if ('data' in newContact) {
+      navigate(`/${newContact.data.id}`)
+    }
   }
 
   return (
@@ -38,7 +44,7 @@ export const NewContact = () => {
       <ContactDetailsForm
         onSubmit={handleSubmit}
         contactData={contactData}
-        hasServerError={isError}
+        hasServerError={hasError}
       />
     </div>
   )

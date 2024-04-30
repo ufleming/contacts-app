@@ -1,7 +1,6 @@
 import { toast } from "react-toastify"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { ContactDetailsFormFields } from "@/components/contactDetailsForm/types"
-import type { Contact, ContactDetails, ContactDataPostBody } from "@/types/contacts"
+import type { Contact, ContactDetails, ContactData, ContactDetailsData } from "@/types/contacts"
 
 export const contactsApi = createApi({
   reducerPath: "contactsAPI",
@@ -10,92 +9,90 @@ export const contactsApi = createApi({
   endpoints: builder => ({
     getContacts: builder.query<Contact[], void>({
       query: () => "contacts?_sort=firstName",
-      transformErrorResponse: ({ status }) => toast.error(`${status}: Couldn't load contacts list`),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't load contacts list`)
+        return error
+      },
       providesTags: () => ["Contacts"],
     }),
     getContact: builder.query<Contact, string>({
       query: contactId => `contacts/${contactId}`,
-      transformErrorResponse: ({ status }) => toast.error(`${status}: Couldn't load the contact`),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't load the contact`)
+        return error
+      },
       providesTags: () => ["Contact"],
     }),
     getContactDetails: builder.query<ContactDetails, string>({
       query: contactId => `contactsDetail/${contactId}`,
-      transformErrorResponse: ({ status }) =>
-        toast.error(`${status}: Couldn't load the contact details`),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't load the contact details`)
+        return error
+      },
       providesTags: () => ["ContactDetails"],
     }),
-
-    // TODO: figure out how to make two requests in a single endpoint
-    createContact: builder.mutation({
-      queryFn: async (
-        body: ContactDetailsFormFields,
-        _queryApi,
-        _extraOptions,
-        fetchWithBaseQuery
-      ) => {
-        const { firstName, lastName, ...rest } = body
-
-        const createdContact = await fetchWithBaseQuery({
-          url: `contacts`,
-          method: "POST",
-          body: { firstName, lastName },
-        })
-
-        await fetchWithBaseQuery({
-          url: `contactsDetail`,
-          method: "POST",
-          body: { ...rest },
-        })
-
-        return createdContact
-      },
-      invalidatesTags: ["Contacts", "ContactDetails"],
-    }),
-    updateContact: builder.mutation({
-      async queryFn(
-        { contactId, body }: ContactDataPostBody,
-        _queryApi,
-        _extraOptions,
-        fetchWithBaseQuery
-      ) {
-        const { firstName, lastName, ...rest } = body
-
-        const { data: updateContact } = await fetchWithBaseQuery({
-          url: `contacts/${contactId}`,
-          method: "PUT",
-          body: { firstName, lastName },
-        })
-
-        const { data: updateContactDetails } = await fetchWithBaseQuery({
-          url: `contactsDetail/${contactId}`,
-          method: "PUT",
-          body: { ...rest },
-        })
-
-        return {
-          data: {
-            ...(updateContact as Contact),
-            ...(updateContactDetails as ContactDetails),
-          },
-        }
-      },
-      invalidatesTags: ["Contacts", "ContactDetails"],
-    }),
-    deleteContact: builder.mutation({
-      queryFn: async (contactId: string = "", _queryApi, _extraOptions, fetchWithBaseQuery) => {
-        const data = await fetchWithBaseQuery({
-          url: `contacts/${contactId}`,
-          method: "DELETE",
-        })
-
-        await fetchWithBaseQuery({
-          url: `contactsDetail/${contactId}`,
-          method: "DELETE",
-        })
-
-        return data
+    createContact: builder.mutation<Contact, ContactData>({
+      query: body => ({
+        url: `contacts`,
+        method: 'POST',
+        body,
+      }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't create the contact`)
+        return error
       },
       invalidatesTags: ["Contacts"],
+    }),
+    createContactDetails: builder.mutation<ContactDetails, ContactDetailsData>({
+      query: body => ({
+        url: `contactsDetail`,
+        method: 'POST',
+        body,
+      }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't create the contact details`)
+        return error
+      },
+      invalidatesTags: ["ContactDetails"],
+    }),
+    updateContact: builder.mutation<Contact, Contact>({
+      query: ({ id, ...body }) => ({
+        url: `contacts/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't update the contact`)
+        return error
+      },
+      invalidatesTags: ["Contacts", "Contact"],
+    }),
+    updateContactDetails: builder.mutation<ContactDetails, ContactDetails>({
+      query: ({ id, ...body }) => ({
+        url: `contactsDetail/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't update the contact details`)
+        return error
+      },
+      invalidatesTags: ["ContactDetails"],
+    }),
+    deleteContact: builder.mutation<void, string>({
+      query: id => ({ url: `contacts/${id}`, method: 'DELETE' }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't delete the contact`)
+        return error
+      },
+      invalidatesTags: ["Contacts"],
+    }),
+    deleteContactDetails: builder.mutation<void, string>({
+      query: id => ({ url: `contactsDetail/${id}`, method: 'DELETE' }),
+      transformErrorResponse: error => {
+        toast.error(`${error.status}: Couldn't update the contact details`)
+        return error
+      }
     }),
   }),
 })
@@ -105,4 +102,5 @@ export const {
   useGetContactQuery,
   useGetContactDetailsQuery,
   useUpdateContactMutation,
+  useUpdateContactDetailsMutation,
 } = contactsApi

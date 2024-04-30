@@ -11,16 +11,26 @@ type NavBlockProps = {
 }
 
 export const NavBlock = ({ title, contacts }: NavBlockProps) => {
-  // TODO: optimize rendering
+  // TODO: [Refactoring] optimize rendering
   const { contactId } = useParams<{ contactId: string }>()
   const isReadOnly = useIsReadOnly()
   const navigate = useNavigate()
   const [deleteContact] = contactsApi.useDeleteContactMutation()
+  const [deleteContactDetails] = contactsApi.useDeleteContactDetailsMutation()
 
-  const handleDelete = () => {
-    if (confirm("Remove contact?")) {
-      deleteContact(contactId).then(() => navigate(`/`))
-    }
+  const deleteContactData = async () => {
+    if (!contactId) return
+
+    await Promise.all([
+      deleteContact(contactId),
+      deleteContactDetails(contactId),
+    ])
+
+    navigate(`/`)
+  }
+
+  const handleDelete = async () => {
+    if (confirm("Remove contact?")) deleteContactData()
   }
 
   return (

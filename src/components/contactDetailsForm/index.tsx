@@ -9,7 +9,7 @@ import type { ContactDetailsFormProps, ContactDetailsFormFields as FormFields } 
 import "./index.css"
 
 export const ContactDetailsForm = (props: ContactDetailsFormProps) => {
-  // TODO: optimize rendering
+  // TODO: [Refactoring] optimize rendering
   const { contactData, onSubmit, hasServerError } = props
   const { register, handleSubmit, reset, formState } = useForm<FormFields>({ resolver })
   const { errors } = formState

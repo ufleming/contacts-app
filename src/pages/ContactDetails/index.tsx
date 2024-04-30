@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
+import { some } from "lodash"
 import { SubmitHandler } from "react-hook-form"
 import { contactsApi } from "@/store/services/contacts"
 import { ContactDetailsForm } from "@/components/contactDetailsForm"
@@ -7,7 +8,7 @@ import type {
   ContactFormData,
 } from "@/components/contactDetailsForm/types"
 
-// TODO: reduce complexity
+// TODO: [Refactoring] reduce complexity
 export const ContactDetailsPage = () => {
   const navigate = useNavigate()
   const { contactId } = useParams<{ contactId: string }>()
@@ -18,31 +19,30 @@ export const ContactDetailsPage = () => {
   }
 
   const [updateContact, { isError: updateContactError }] = contactsApi.useUpdateContactMutation()
+  const [updateContactDetails, { isError: updateContactDetailsError }] = contactsApi.useUpdateContactDetailsMutation()
   const { data: contactData, isError: getContactError } = contactsApi.useGetContactQuery(contactId)
-  const { data: contactDetails, isError: getContactDetailError } = contactsApi.useGetContactDetailsQuery(contactId)
-  const hasError = updateContactError || getContactError || getContactDetailError
-
-  if (updateContactError) {
-    return <p className="text-center text-danger">Error: Couldn't submit your data</p>
-  }
-
-  if (getContactDetailError) {
-    return <p className="text-center text-danger">Error: Couldn't load contact details</p>
-  }
+  const { data: contactDetails, isError: getContactDetailsError } = contactsApi.useGetContactDetailsQuery(contactId)
+  const hasError = some([updateContactError, updateContactDetailsError, getContactError, getContactDetailsError], true)
 
   if (!contactDetails || !contactData) {
     return <p className="text-center">Loading contact details</p>
   }
 
-  const { id: contactDataId, ...restContactData } = contactData
+  const { firstName, lastName } = contactData
   const { id, ...restContactDetails } = contactDetails
 
-  const handleSubmit: SubmitHandler<ContactDetailsFormFields> = data => {
-    updateContact({ contactId, body: data })
+  const handleSubmit: SubmitHandler<ContactDetailsFormFields> = async data => {
+    const {firstName, lastName, ...contactDetails} = data
+
+    await Promise.all([
+      updateContact({ id, firstName, lastName }),
+      updateContactDetails({ id, ...contactDetails }),
+    ])
+
     navigate(`/${contactId}`)
   }
 
-  const prepareData: ContactFormData = { ...restContactData, ...restContactDetails }
+  const prepareData: ContactFormData = { firstName, lastName, ...restContactDetails }
 
   return (
     <div className="contact-details px-2 px-lg-5 h-100">
