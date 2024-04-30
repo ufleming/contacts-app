@@ -146,9 +146,9 @@
       "lastName": "Wright"
     },
     {
-      "id": 30,
       "firstName": "Ashley",
-      "lastName": "Lopez"
+      "lastName": "Lopez",
+      "id": 30
     },
     {
       "id": 31,
@@ -456,11 +456,11 @@
       "note": "Passionate about photography."
     },
     {
-      "id": 30,
       "phone": "012-345-6789",
       "email": "ashley.lopez@example.com",
       "address": "321 Main St, Somewhere, USA",
-      "note": "Loves reading mystery novels."
+      "note": "Loves reading mystery novels.",
+      "id": 30
     },
     {
       "id": 31,
