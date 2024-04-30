@@ -11,7 +11,6 @@ type NavBlockProps = {
 }
 
 export const NavBlock = ({ title, contacts }: NavBlockProps) => {
-  // TODO: [Refactoring] optimize rendering
   const { contactId } = useParams<{ contactId: string }>()
   const isReadOnly = useIsReadOnly()
   const navigate = useNavigate()
@@ -29,7 +28,7 @@ export const NavBlock = ({ title, contacts }: NavBlockProps) => {
     navigate(`/`)
   }
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (confirm("Remove contact?")) deleteContactData()
   }
 

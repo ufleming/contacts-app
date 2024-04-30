@@ -9,11 +9,10 @@ import type { ContactDetailsFormProps, ContactDetailsFormFields as FormFields } 
 import "./index.css"
 
 export const ContactDetailsForm = (props: ContactDetailsFormProps) => {
-  // TODO: [Refactoring] optimize rendering
+  const isReadOnly = useIsReadOnly()
   const { contactData, onSubmit, hasServerError } = props
   const { register, handleSubmit, reset, formState } = useForm<FormFields>({ resolver })
   const { errors } = formState
-  const isReadOnly = useIsReadOnly()
 
   useEffect(() => {
     if (!hasServerError) reset(contactData)
