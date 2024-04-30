@@ -8,7 +8,6 @@ import type {
   ContactFormData,
 } from "@/components/contactDetailsForm/types"
 
-// TODO: [Refactoring] reduce complexity
 export const ContactDetailsPage = () => {
   const navigate = useNavigate()
   const { contactId } = useParams<{ contactId: string }>()
@@ -42,13 +41,13 @@ export const ContactDetailsPage = () => {
     navigate(`/${contactId}`)
   }
 
-  const prepareData: ContactFormData = { firstName, lastName, ...restContactDetails }
+  const prepareFormData: ContactFormData = { firstName, lastName, ...restContactDetails }
 
   return (
     <div className="contact-details px-2 px-lg-5 h-100">
       <ContactDetailsForm
         onSubmit={handleSubmit}
-        contactData={prepareData}
+        contactData={prepareFormData}
         hasServerError={hasError}
       />
     </div>

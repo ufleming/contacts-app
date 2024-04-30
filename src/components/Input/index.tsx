@@ -1,8 +1,7 @@
-import { ContactDetailsFormFields } from "@/components/contactDetailsForm/types"
+import type { ContactDetailsFormFields } from "@/components/contactDetailsForm/types"
 import type { InputProps } from "./types"
 
 export const Input = (props: InputProps<ContactDetailsFormFields>) => {
-  // TODO: [Refactoring] optimize rendering
   const { error, register, ...inputProps } = props
 
   return (
